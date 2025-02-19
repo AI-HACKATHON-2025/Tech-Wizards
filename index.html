@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmotiCare - Galactic Edition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* Gauge Meter Styles */
+    .gauge-container {
+      width: 250px;               /* Compact width */
+      margin: 20px auto;
+      text-align: center;
+    }
+    .gauge {
+      width: 100%;
+      height: 30px;               /* Gauge height */
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      margin-bottom: 5px;
+    }
+    .gauge-fill {
+      height: 100%;
+      width: 0%;                  /* Initial fill at 0% */
+      background-color: #76c7c0;  /* Fill color */
+      transition: width 0.5s ease-in-out;
+    }
+    .gauge-label {
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Log In & Sign In Links -->
+  <div class="auth-links">
+      <a href="#">Log In</a>
+      <a href="#">Sign In</a>
+  </div>
+
+  <!-- Main content -->
+  <h1 class="neon-heading">EmotiCare</h1>
+
+  <!-- File Upload Box -->
+  <div class="form-container">
+      <form method="post" enctype="multipart/form-data">
+          <label class="custom-file-upload">
+              <input type="file" name="image" accept="image/*" required>
+              Choose File
+          </label>
+          <span class="file-name">No file chosen</span>
+          <button type="submit">Analyze Emotion</button>
+      </form>
+  </div>
+
+  <!-- Display Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-messages">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message|safe }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Gauge Meter for Emotion Depth -->
+  <div class="gauge-container">
+    <div class="gauge">
+      <div class="gauge-fill"></div>
+    </div>
+    <div class="gauge-label">0%</div>
+    <!-- Button to simulate gauge update (for testing purposes) -->
+    <button onclick="simulateEmotion()">Simulate Emotion Update</button>
+  </div>
+
+  <!-- Space & Galaxy Effects -->
+  <canvas id="galaxyCanvas"></canvas>
+  <div class="space-elements"></div>
+
+  <!-- External Script (for Galaxy Effects, etc.) -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <!-- Inline Gauge Meter Script -->
+  <script>
+    /**
+     * updateGauge(value)
+     * Updates the gauge meter based on a value between 0 and 100.
+     * @param {number} value - The emotion intensity percentage.
+     */
+    function updateGauge(value) {
+      // Ensure the value stays within 0-100%
+      value = Math.max(0, Math.min(100, value));
+      document.querySelector('.gauge-fill').style.width = value + '%';
+      document.querySelector('.gauge-label').textContent = value + '%';
+    }
+
+    /**
+     * simulateEmotion()
+     * For demonstration, generates a random emotion intensity value.
+     */
+    function simulateEmotion() {
+      const randomValue = Math.floor(Math.random() * 101);
+      updateGauge(randomValue);
+    }
+
+    // Optionally, simulate an emotion update on page load after a short delay.
+    window.onload = function() {
+      setTimeout(simulateEmotion, 1000);
+    };
+  </script>
+</body>
+</html>
