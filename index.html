@@ -1,115 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmotiCare - Galactic Edition</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <style>
-    /* Gauge Meter Styles */
-    .gauge-container {
-      width: 250px;               /* Compact width */
-      margin: 20px auto;
-      text-align: center;
-    }
-    .gauge {
-      width: 100%;
-      height: 30px;               /* Gauge height */
-      background-color: #ddd;
-      border-radius: 5px;
-      overflow: hidden;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      margin-bottom: 5px;
-    }
-    .gauge-fill {
-      height: 100%;
-      width: 0%;                  /* Initial fill at 0% */
-      background-color: #76c7c0;  /* Fill color */
-      transition: width 0.5s ease-in-out;
-    }
-    .gauge-label {
-      font-family: Arial, sans-serif;
-      color: #333;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmotiCare - Galactic Edition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Log In & Sign In Links -->
-  <div class="auth-links">
-      <a href="#">Log In</a>
-      <a href="#">Sign In</a>
-  </div>
-
-  <!-- Main content -->
-  <h1 class="neon-heading">EmotiCare</h1>
-
-  <!-- File Upload Box -->
-  <div class="form-container">
-      <form method="post" enctype="multipart/form-data">
-          <label class="custom-file-upload">
-              <input type="file" name="image" accept="image/*" required>
-              Choose File
-          </label>
-          <span class="file-name">No file chosen</span>
-          <button type="submit">Analyze Emotion</button>
-      </form>
-  </div>
-
-  <!-- Display Flash Messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class="flash-messages">
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message|safe }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
-
-  <!-- Gauge Meter for Emotion Depth -->
-  <div class="gauge-container">
-    <div class="gauge">
-      <div class="gauge-fill"></div>
+    <!-- Log In & Sign In Links -->
+    <div class="auth-links">
+        <a href="#">Log In</a>
+        <a href="#">Sign In</a>
     </div>
-    <div class="gauge-label">0%</div>
-    <!-- Button to simulate gauge update (for testing purposes) -->
-    <button onclick="simulateEmotion()">Simulate Emotion Update</button>
-  </div>
 
-  <!-- Space & Galaxy Effects -->
-  <canvas id="galaxyCanvas"></canvas>
-  <div class="space-elements"></div>
+    <!-- Main content -->
+    <h1 class="neon-heading">EmotiCare</h1>
 
-  <!-- External Script (for Galaxy Effects, etc.) -->
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
-  <!-- Inline Gauge Meter Script -->
-  <script>
-    /**
-     * updateGauge(value)
-     * Updates the gauge meter based on a value between 0 and 100.
-     * @param {number} value - The emotion intensity percentage.
-     */
-    function updateGauge(value) {
-      // Ensure the value stays within 0-100%
-      value = Math.max(0, Math.min(100, value));
-      document.querySelector('.gauge-fill').style.width = value + '%';
-      document.querySelector('.gauge-label').textContent = value + '%';
-    }
+    <!-- File Upload Box -->
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            <label class="custom-file-upload">
+                <input type="file" name="image" accept="image/*" required onchange="updateFileName(this)">
+                Choose File
+            </label>
+            <span class="file-name">No file chosen</span>
+            <button type="submit">Analyze Emotion</button>
+        </form>
+    </div>
 
-    /**
-     * simulateEmotion()
-     * For demonstration, generates a random emotion intensity value.
-     */
-    function simulateEmotion() {
-      const randomValue = Math.floor(Math.random() * 101);
-      updateGauge(randomValue);
-    }
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
-    // Optionally, simulate an emotion update on page load after a short delay.
-    window.onload = function() {
-      setTimeout(simulateEmotion, 1000);
-    };
-  </script>
+    <!-- Live Face Detection -->
+    <h2>Live Emotion Detection</h2>
+    <div class="live-container">
+        <video id="video" width="640" height="480" autoplay></video>
+        <div id="emotion-result" class="result-overlay"></div>
+    </div>
+
+    <!-- Space & Galaxy Effects -->
+    <canvas id="galaxyCanvas"></canvas>
+    <div class="space-elements">
+        <div class="emoji" style="left: 10%; top: 20%;">😊</div>
+        <div class="emoji" style="left: 30%; top: 40%;">😢</div>
+        <div class="emoji" style="left: 50%; top: 10%;">😡</div>
+        <div class="emoji" style="left: 70%; top: 50%;">😱</div>
+        <div class="emoji" style="left: 90%; top: 30%;">😍</div>
+        <div class="emoji" style="left: 20%; top: 60%;">😜</div>
+        <div class="emoji" style="left: 40%; top: 80%;">😎</div>
+        <div class="emoji" style="left: 60%; top: 20%;">😇</div>
+        <div class="emoji" style="left: 80%; top: 40%;">🤔</div>
+        <div class="emoji" style="left: 10%; top: 70%;">😴</div>
+        <div class="emoji" style="left: 30%; top: 90%;">🤩</div>
+        <div class="emoji" style="left: 50%; top: 60%;">😅</div>
+        <div class="emoji" style="left: 70%; top: 80%;">😬</div>
+        <div class="emoji" style="left: 90%; top: 10%;">😤</div>
+    </div>
+
+    <script src="{{ url_for('static', filename='a3.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoElement = document.getElementById('video');
+            const emotionResult = document.getElementById('emotion-result');
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(function(error) {
+                        console.error('Error accessing the webcam.', error);
+                    });
+            }
+
+            setInterval(() => {
+                fetch('/video_feed')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const image = new Image();
+                        image.src = url;
+                        image.onload = () => {
+                            // Perform face and emotion detection here
+                            // This should be implemented in the backend
+                            // Update emotionResult with the detected emotion and message
+                            emotionResult.innerText = "Detected Emotion: [Emotion] - [Message]";
+                        };
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the video feed.', error);
+                    });
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
