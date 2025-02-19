@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmotiCare - Galactic Edition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Log In & Sign In Links -->
+    <div class="auth-links">
+        <a href="#">Log In</a>
+        <a href="#">Sign In</a>
+    </div>
+
+    <!-- Main content -->
+    <h1 class="neon-heading">EmotiCare</h1>
+
+    <!-- File Upload Box -->
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            <label class="custom-file-upload">
+                <input type="file" name="image" accept="image/*" required onchange="updateFileName(this)">
+                Choose File
+            </label>
+            <span class="file-name">No file chosen</span>
+            <button type="submit">Analyze Emotion</button>
+        </form>
+    </div>
+
+    <!-- Display Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Live Face Detection -->
+    <h2>Live Emotion Detection</h2>
+    <div class="live-container">
+        <video id="video" width="640" height="480" autoplay></video>
+        <div id="emotion-result" class="result-overlay"></div>
+    </div>
+
+    <!-- Space & Galaxy Effects -->
+    <canvas id="galaxyCanvas"></canvas>
+    <div class="space-elements">
+        <div class="emoji" style="left: 10%; top: 20%;">😊</div>
+        <div class="emoji" style="left: 30%; top: 40%;">😢</div>
+        <div class="emoji" style="left: 50%; top: 10%;">😡</div>
+        <div class="emoji" style="left: 70%; top: 50%;">😱</div>
+        <div class="emoji" style="left: 90%; top: 30%;">😍</div>
+        <div class="emoji" style="left: 20%; top: 60%;">😜</div>
+        <div class="emoji" style="left: 40%; top: 80%;">😎</div>
+        <div class="emoji" style="left: 60%; top: 20%;">😇</div>
+        <div class="emoji" style="left: 80%; top: 40%;">🤔</div>
+        <div class="emoji" style="left: 10%; top: 70%;">😴</div>
+        <div class="emoji" style="left: 30%; top: 90%;">🤩</div>
+        <div class="emoji" style="left: 50%; top: 60%;">😅</div>
+        <div class="emoji" style="left: 70%; top: 80%;">😬</div>
+        <div class="emoji" style="left: 90%; top: 10%;">😤</div>
+    </div>
+
+    <script src="{{ url_for('static', filename='a3.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoElement = document.getElementById('video');
+            const emotionResult = document.getElementById('emotion-result');
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(function(error) {
+                        console.error('Error accessing the webcam.', error);
+                    });
+            }
+
+            setInterval(() => {
+                fetch('/video_feed')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const image = new Image();
+                        image.src = url;
+                        image.onload = () => {
+                            // Perform face and emotion detection here
+                            // This should be implemented in the backend
+                            // Update emotionResult with the detected emotion and message
+                            emotionResult.innerText = "Detected Emotion: [Emotion] - [Message]";
+                        };
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the video feed.', error);
+                    });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

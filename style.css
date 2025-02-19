@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    background: radial-gradient(circle at 30% 60%, #6a11cb, #070a1a);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Log In & Sign In */
+.auth-links {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.2rem;
+}
+
+.auth-links a {
+    color: red;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-left: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #e42424, 0 0 20px #4dcaff;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+    color: #ff99cc;
+}
+
+/* Neon Heading */
+.neon-heading {
+    font-size: 3em;
+    color: #fff;
+    text-shadow: 0 0 20px #8c50ff, 0 0 30px #6f34d6;
+    margin-top: 20px;
+}
+
+/* File Upload */
+.form-container {
+    background: rgba(40, 30, 70, 0.8);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(140, 80, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Custom File Upload */
+.custom-file-upload {
+    background: #6f34d6;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.custom-file-upload:hover {
+    background: #8c50ff;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-name {
+    display: block;
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Button */
+button {
+    background-color: #8c50ff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    box-shadow: 0 0 10px #8c50ff;
+}
+
+button:hover {
+    background-color: #6f34d6;
+    box-shadow: 0 0 20px #8c50ff, 0 0 40px #6f34d6;
+}
+
+/* Space & Galaxy Effects */
+#galaxyCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+}
+
+/* Glowing Swirling Galaxy */
+.galaxy {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(100, 50, 255, 0.5) 20%, transparent 80%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    animation: rotateGalaxy 60s infinite linear;
+}
+
+@keyframes rotateGalaxy {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
